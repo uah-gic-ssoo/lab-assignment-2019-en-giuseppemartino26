@@ -19,8 +19,8 @@ int main(int argc, char* argv[]) {
     int from, to;
 
     pid_t id;
-    char outfile[91];
-    int status = 0;
+    char outfile[21];
+    int status;
 
     if (!are_arguments_correct(argc, argv)) {
         return -1;
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	if ( id == 0) {
-                printf("\nprocess %d\n" , i);
+                printf("\n Child process %d\n" , i);
 		printf("\t chunk #%d: Range %d-%d \n", i, from, to);
 		sprintf(outfile, "%s-%d \n", CHUNK_FILENAME_PREFIX, i);
 		download_fragment(TARGET_URL, from, to, outfile);
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
              * (sequential)
              */
 		wait(&status);
-		printf("\nEnd  process %d\n", i);
+		printf("\nEnd of child process %d\n", i);
 	}
 
         }
