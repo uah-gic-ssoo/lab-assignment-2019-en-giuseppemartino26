@@ -17,7 +17,10 @@ int main(int argc, char* argv[]) {
     int chunk_size;
     int i;
     int from, to;
-    int pid;
+
+    pid_t id;
+    char outfile[91];
+    int status = 0;
 
     if (!are_arguments_correct(argc, argv)) {
         return -1;
@@ -69,6 +72,23 @@ int main(int argc, char* argv[]) {
          *   - exit(0);
          */
 
+	id = fork();
+
+	if( id == -1){
+		perror("Error when calling fork");
+		exit(1);
+	}
+
+	if ( id == 0) {
+                printf("\nprocess %d\n" , i);
+		printf("\t chunk #%d: Range %d-%d \n", i, from, to);
+		sprintf(outfile, "%s-%d \n", CHUNK_FILENAME_PREFIX, i);
+		download_fragment(TARGET_URL, from, to, outfile);
+		exit(0);
+	}
+
+
+
 
         if (download_mode == 'S') {
             /**
@@ -76,16 +96,27 @@ int main(int argc, char* argv[]) {
              * downloading the current chunk if the download mode is S
              * (sequential)
              */
+		wait(&status);
+		printf("\nEnd  process %d\n", i);
+	}
+
         }
-    }
+    
 
     if (download_mode == 'P') {
         /**
          * TODO: wait until all the downloads have finished if the download mode
          * is P (parallel)
-         */
-    }
+        */
+	    while (wait(&status) > 0 ) { } ;
+
+	    printf("\nEnd all child processes\n");
+	    }
+   
+
+    
     printf ("-- End downloader --\n");
+    return 0;
 }
 
 /**
