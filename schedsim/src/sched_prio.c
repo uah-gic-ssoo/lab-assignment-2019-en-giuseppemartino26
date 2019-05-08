@@ -127,7 +127,7 @@ void ioHardDiskIRQ(PCB_t * pcb) {
     if (runningTask != NULL) {
     
         // If there was a task already running, put this one on ready
-        // state and append it to the end of the ready queue
+        // state and enqueue it in the ready queue
         setState(pcb, READY);
         addPCBByPriority(readyQueue, pcb);
 
@@ -200,8 +200,7 @@ void ioKeyboardIRQ(PCB_t * pcb) {
     // Check if there was already a task in execution
     if (runningTask != NULL) {
     
-        // If there was a task already running, put this one on ready
-        // state and append it to the end of the ready queue
+       
         setState(pcb, READY);
 	addPCBByPriority(readyQueue, pcb);
         
@@ -217,3 +216,4 @@ void ioKeyboardIRQ(PCB_t * pcb) {
 
 
 }
+
