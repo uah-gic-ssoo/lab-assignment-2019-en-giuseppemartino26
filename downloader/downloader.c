@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
 
     
     printf ("-- End downloader --\n");
-    return 0;
+    
 }
 
 /**
